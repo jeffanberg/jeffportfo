@@ -33,7 +33,7 @@ def submit_form():
         try:
             data = request.form.to_dict()
             write_to_db(data)
-            return redirect('/#')
+            return redirect('/#thankyou')
         except:
             return 'Did not save to database.'
     else:
