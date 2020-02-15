@@ -25,6 +25,7 @@ def write_to_db(data):
         message = data['message']
         csv_writer = csv.writer(c_db, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([email, name, message])
+    return 'Entry made to database'
 
 
 @app.route('/submit_form', methods=['POST', 'GET'])
