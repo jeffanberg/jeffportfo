@@ -11,6 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="./static/assets/css/main.css" />
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <noscript>
         <link rel="stylesheet" href="./static/assets/css/noscript.css" /></noscript>
 </head>
@@ -91,6 +92,7 @@
                             <label for="message">Message</label>
                             <textarea name="message" id="message" rows="4"></textarea>
                         </div>
+                        {{ recaptcha }}
                     </div>
                     <ul class="actions">
                         <li><input type="submit" value="Send Message" class="primary" /></li>

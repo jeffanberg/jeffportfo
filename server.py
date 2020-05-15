@@ -1,9 +1,19 @@
 from flask import Flask, render_template, request, redirect
+from flask_google_recaptcha import GoogleReCaptcha
 from pathlib import Path
 import csv
 
 app = Flask(__name__)
 
+app.config.update({'RECAPTCHA_ENABLED': True,
+                   'RECAPTCHA_SITE_KEY':
+                       '6LfTefcUAAAAAMsBLYsUbQ-E8FYoFSULI9G5Z0FU',
+                   'RECAPTCHA_SECRET_KEY':
+                       '6LfTefcUAAAAAGixaKps3vPWtTEba6EV1_qrKIHW',
+                    'RECAPTCHA_THEME':
+                        'dark'})
+
+recaptcha = GoogleReCaptcha(app=app)
 
 @app.route('/')
 def main_page():
@@ -31,11 +41,14 @@ def write_to_db(data):
 @app.route('/submit_form', methods=['POST', 'GET'])
 def submit_form():
     if request.method == 'POST':
-        try:
-            data = request.form.to_dict()
-            write_to_db(data)
-            return redirect('/#thankyou')
-        except:
-            return 'Did not save to database.'
+        if recaptcha.verify():
+            try:
+                data = request.form.to_dict()
+                write_to_db(data)
+                return redirect('/#thankyou')
+            except:
+                return 'Did not save to database.'
+        else:
+            return 'Probably a robot.'
     else:
         return 'Something went wrong'
