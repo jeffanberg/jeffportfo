@@ -302,10 +302,6 @@ input, select, textarea {
 
 /* Form */
 
-    g-recaptcha {
-		margin: auto;
-	}
-
 	form {
 		margin: 0 0 2rem 0;
 	}
