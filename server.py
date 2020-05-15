@@ -5,17 +5,10 @@ import csv, requests, json
 
 app = Flask(__name__)
 
-app.config.update({'RECAPTCHA_ENABLED': True,
-                   'RECAPTCHA_SITE_KEY':
-                       '6LfTefcUAAAAAMsBLYsUbQ-E8FYoFSULI9G5Z0FU',
-                   'RECAPTCHA_SECRET_KEY':
-                       '6LfTefcUAAAAAGixaKps3vPWtTEba6EV1_qrKIHW',
-                    'RECAPTCHA_THEME':
-                        'dark'})
 
 def check_recaptcha(f):
     """
-    Checks Google  reCAPTCHA.
+    Checks Google reCAPTCHA.
 
     :param f: view function
     :return: Function
@@ -40,7 +33,7 @@ def check_recaptcha(f):
                 request.recaptcha_is_valid = True
             else:
                 request.recaptcha_is_valid = False
-                return('Invalid reCAPTCHA. Please try again.', 'error')
+                return('Please try again and confirm the Google ReCaptcha.', 'error')
 
         return f(*args, **kwargs)
 
