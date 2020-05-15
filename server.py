@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
-from flask_google_recaptcha import GoogleReCaptcha
 from pathlib import Path
-import csv
+from functools import wraps
+import csv, requests, json
 
 app = Flask(__name__)
 
@@ -13,7 +13,39 @@ app.config.update({'RECAPTCHA_ENABLED': True,
                     'RECAPTCHA_THEME':
                         'dark'})
 
-recaptcha = GoogleReCaptcha(app=app)
+def check_recaptcha(f):
+    """
+    Checks Google  reCAPTCHA.
+
+    :param f: view function
+    :return: Function
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        request.recaptcha_is_valid = None
+
+        if request.method == 'POST':
+            data = {
+                'secret': '6LfTefcUAAAAAGixaKps3vPWtTEba6EV1_qrKIHW',
+                'response': request.form.get('g-recaptcha-response'),
+                'remoteip': request.access_route[0]
+            }
+            r = requests.post(
+                "https://www.google.com/recaptcha/api/siteverify",
+                data=data
+            )
+            result = r.json()
+
+            if result['success']:
+                request.recaptcha_is_valid = True
+            else:
+                request.recaptcha_is_valid = False
+                return('Invalid reCAPTCHA. Please try again.', 'error')
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
 
 @app.route('/')
 def main_page():
@@ -39,16 +71,15 @@ def write_to_db(data):
 
 
 @app.route('/submit_form', methods=['POST', 'GET'])
+@check_recaptcha
 def submit_form():
     if request.method == 'POST':
-        if recaptcha.verify():
-            try:
-                data = request.form.to_dict()
-                write_to_db(data)
-                return redirect('/#thankyou')
-            except:
-                return 'Did not save to database.'
-        else:
-            return 'Probably a robot.'
+        try:
+            data = request.form.to_dict()
+            write_to_db(data)
+            return redirect('/#thankyou')
+        except:
+            return 'Did not save to database.'
     else:
-        return 'Something went wrong'
+        return 'Something went wrong.'
+
