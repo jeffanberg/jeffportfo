@@ -130,3 +130,4 @@ dmypy.json
 
 #Contact database
 contact_database.csv
+.vscode/launch.json
