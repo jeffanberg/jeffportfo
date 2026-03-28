@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, make_response, jsonify
 from pathlib import Path
 from functools import wraps
-import csv, requests, json, html
+import csv, requests, json, html, os
 
 app = Flask(__name__)
+# Limit incoming request payload to 1MB to prevent memory exhaustion DoS attacks
+app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
 
 @app.after_request
 def add_security_headers(response):
@@ -26,8 +28,12 @@ def check_recaptcha(f):
             # For JSON endpoints and Form endpoints
             recaptcha_response = request.form.get('g-recaptcha-response') or request.json.get('g-recaptcha-response') if request.is_json else request.form.get('g-recaptcha-response')
             
+            secret = os.environ.get('RECAPTCHA_SECRET_KEY', '')
+            if not secret:
+                print("WARNING: RECAPTCHA_SECRET_KEY environment variable is missing.")
+
             data = {
-                'secret': '6LfTefcUAAAAAGixaKps3vPWtTEba6EV1_qrKIHW',
+                'secret': secret,
                 'response': recaptcha_response,
                 'remoteip': request.access_route[0]
             }
