@@ -28,33 +28,37 @@ def check_recaptcha(f):
             # For JSON endpoints and Form endpoints
             recaptcha_response = request.form.get('g-recaptcha-response') or request.json.get('g-recaptcha-response') if request.is_json else request.form.get('g-recaptcha-response')
             
-            secret = os.environ.get('RECAPTCHA_SECRET_KEY', '')
-            if not secret:
-                print("WARNING: RECAPTCHA_SECRET_KEY environment variable is missing.")
+            api_key = os.environ.get('RECAPTCHA_API_KEY', '')
+            if not api_key:
+                print("WARNING: RECAPTCHA_API_KEY environment variable is missing.")
 
             data = {
-                'secret': secret,
-                'response': recaptcha_response,
-                'remoteip': request.access_route[0]
+                "event": {
+                    "token": recaptcha_response,
+                    "expectedAction": "contact_form_submit",
+                    "siteKey": "6Lf_GJwsAAAAACLncXT--_qoUYj2n83Nc9eXBZ02"
+                }
             }
             try:
                 r = requests.post(
-                    "https://www.google.com/recaptcha/api/siteverify",
-                    data=data
+                    f"https://recaptchaenterprise.googleapis.com/v1/projects/recaptcha-migrated-72bf259d309/assessments?key={api_key}",
+                    json=data
                 )
                 result = r.json()
             except:
-                result = {'success': False}
+                result = {}
 
-            is_success = result.get('success', False)
-            score = result.get('score', 0.0)
-            action = result.get('action', '')
+            # Parse Enterprise assessment response
+            token_props = result.get('tokenProperties', {})
+            is_valid = token_props.get('valid', False)
+            action = token_props.get('action', '')
+            score = result.get('riskAnalysis', {}).get('score', 0.0)
 
-            if is_success and score >= 0.5 and action == 'contact_form_submit':
+            if is_valid and score >= 0.5 and action == 'contact_form_submit':
                 request.recaptcha_is_valid = True
             else:
                 request.recaptcha_is_valid = False
-                print(f"reCAPTCHA v3 failed. Score: {score}, Action: {action}")
+                print(f"reCAPTCHA Enterprise failed. Valid: {is_valid}, Score: {score}, Action: {action}")
                 return jsonify({'status': 'error', 'message': 'Automated submission detected. Please try again later.'}), 400
 
         return f(*args, **kwargs)

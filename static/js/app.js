@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.textContent = 'Sending...';
             btn.disabled = true;
 
-            grecaptcha.ready(() => {
-                grecaptcha.execute('YOUR_V3_SITE_KEY', {action: 'contact_form_submit'}).then(async (token) => {
+            grecaptcha.enterprise.ready(async () => {
+                try {
+                    const token = await grecaptcha.enterprise.execute('6Lf_GJwsAAAAACLncXT--_qoUYj2n83Nc9eXBZ02', {action: 'contact_form_submit'});
                     const formData = new FormData(form);
                     const data = Object.fromEntries(formData.entries());
                     
@@ -83,7 +84,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         btn.textContent = originalText;
                         btn.disabled = false;
                     }
-                });
+                } catch (err) {
+                    msgBox.style.display = 'block';
+                    msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                    msgBox.style.color = '#fca5a5';
+                    msgBox.textContent = 'reCAPTCHA initialization failed. Please try again.';
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
             });
         });
     }
