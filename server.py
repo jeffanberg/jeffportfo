@@ -46,11 +46,16 @@ def check_recaptcha(f):
             except:
                 result = {'success': False}
 
-            if result.get('success'):
+            is_success = result.get('success', False)
+            score = result.get('score', 0.0)
+            action = result.get('action', '')
+
+            if is_success and score >= 0.5 and action == 'contact_form_submit':
                 request.recaptcha_is_valid = True
             else:
                 request.recaptcha_is_valid = False
-                return jsonify({'status': 'error', 'message': 'Please confirm the Google ReCaptcha.'}), 400
+                print(f"reCAPTCHA v3 failed. Score: {score}, Action: {action}")
+                return jsonify({'status': 'error', 'message': 'Automated submission detected. Please try again later.'}), 400
 
         return f(*args, **kwargs)
 

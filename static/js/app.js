@@ -36,61 +36,55 @@ document.addEventListener('DOMContentLoaded', () => {
     // AJAX form submission
     const form = document.getElementById('contact-form');
     if (form) {
-        form.addEventListener('submit', async (e) => {
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const msgBox = document.getElementById('form-msg');
             msgBox.style.display = 'none';
             
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            // Basic frontend validation for recaptcha
-            if (!data['g-recaptcha-response']) {
-                msgBox.style.display = 'block';
-                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                msgBox.style.color = '#fca5a5';
-                msgBox.textContent = 'Please complete the reCAPTCHA.';
-                return;
-            }
-
             const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             btn.textContent = 'Sending...';
             btn.disabled = true;
 
-            try {
-                const res = await fetch('/submit_form', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await res.json();
-                
-                msgBox.style.display = 'block';
-                if (res.ok) {
-                    msgBox.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
-                    msgBox.style.color = '#86efac';
-                    msgBox.textContent = 'Message sent successfully. Thank you!';
-                    form.reset();
-                    if(typeof grecaptcha !== 'undefined'){
-                        grecaptcha.reset();
+            grecaptcha.ready(() => {
+                grecaptcha.execute('YOUR_V3_SITE_KEY', {action: 'contact_form_submit'}).then(async (token) => {
+                    const formData = new FormData(form);
+                    const data = Object.fromEntries(formData.entries());
+                    
+                    data['g-recaptcha-response'] = token;
+
+                    try {
+                        const res = await fetch('/submit_form', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+                        
+                        const result = await res.json();
+                        
+                        msgBox.style.display = 'block';
+                        if (res.ok) {
+                            msgBox.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+                            msgBox.style.color = '#86efac';
+                            msgBox.textContent = 'Message sent successfully. Thank you!';
+                            form.reset();
+                        } else {
+                            msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                            msgBox.style.color = '#fca5a5';
+                            msgBox.textContent = result.message || 'Something went wrong.';
+                        }
+                    } catch (err) {
+                        msgBox.style.display = 'block';
+                        msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                        msgBox.style.color = '#fca5a5';
+                        msgBox.textContent = 'Network error. Please try again.';
+                    } finally {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
                     }
-                } else {
-                    msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                    msgBox.style.color = '#fca5a5';
-                    msgBox.textContent = result.message || 'Something went wrong.';
-                }
-            } catch (err) {
-                msgBox.style.display = 'block';
-                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                msgBox.style.color = '#fca5a5';
-                msgBox.textContent = 'Network error. Please try again.';
-            } finally {
-                btn.textContent = originalText;
-                btn.disabled = false;
-            }
+                });
+            });
         });
     }
 });
