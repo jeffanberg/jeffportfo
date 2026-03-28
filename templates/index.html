@@ -1,139 +1,171 @@
-<!DOCTYPE HTML>
-<!--
-	Dimension by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <title>Jeff Anberg's Portfolio</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="./static/assets/css/main.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeff Anberg — Portfolio</title>
+    <meta name="description"
+        content="Portfolio of Jeff Anberg, editor, writer, and tech enthusiast based in San Francisco.">
+    <!-- Using Vanilla CSS instead of external libraries for maximum performance -->
+    <link rel="stylesheet" href="/static/css/style.css?v=1.4">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <noscript>
-        <link rel="stylesheet" href="./static/assets/css/noscript.css" /></noscript>
 </head>
 
-<body class="is-preload">
+<body>
+    <!-- Background features with dark mode premium overlay -->
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
 
-    <!-- Wrapper -->
-    <div id="wrapper">
-
-        <!-- Header -->
-        <header id="header">
+    <div class="container">
+        <header>
             <div class="logo">
-                <span class="fas fa-camera-retro"></span>
+                <h1>Jeff Anberg</h1>
             </div>
-            <div class="content">
-                <div class="inner">
-                    <h1>Jeff Anberg</h1>
-                    <p>I am an editor and writer living in San Francisco
-			well-versed in public and investor relations, media distribution,
-			and client management of high-profile customers.</p>
-                </div>
-            </div>
-            <nav>
+            <nav id="nav">
                 <ul>
-                    <li><a href="#intro">Intro</a></li>
-                    <li><a href="#work">Work</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#intro" data-target="intro">Intro</a></li>
+                    <li><a href="#work" data-target="work">Work</a></li>
+                    <li><a href="#about" data-target="about">About</a></li>
+                    <li><a href="#contact" data-target="contact">Contact</a></li>
                 </ul>
             </nav>
         </header>
 
-        <!-- Main -->
-        <div id="main">
+        <main>
+            <!-- Hero content shown when no hash is active -->
+            <div class="hero" id="hero">
+                <h2>I translate ideas into impact.</h2>
+                <p>I am an editor and writer living in San Francisco, specializing in financial research, editorial
+                    strategy, and optimizing content workflows with AI technologies.</p>
+                <div style="display: flex; justify-content: center; gap: 1rem;">
+                    <a href="#work" data-target="work" class="btn primary">View My Work</a>
+                    <a href="#contact" data-target="contact" class="btn">Get in Touch</a>
+                </div>
+            </div>
 
-            <!-- Intro -->
-            <article id="intro">
-                <h2 class="major">Intro</h2>
-                <span class="image main"><img src="./static/images/pic01.jpg" alt="" /></span>
-                <p> With a robust academic background in critical theory, language, and philosophy,
-                    and a life-long passion for technology, I aim to combine these intellectual pursuits
-                    with a professional career that may vary from marketing, journalism, or the tech sector.
-                    Regardless of the specific work, I strive to inform every activity I do with my passion
-                    for social understanding and forging humane relationships with everyone I encounter.</p>
-            </article>
+            <!-- Intro Panel -->
+            <div class="glass-panel" id="panel-intro">
+                <button class="close-btn" aria-label="Close" data-action="close">&times;</button>
+                <h2>Intro</h2>
+                <div class="content-layout">
+                    <div class="content-image">
+                        <img src="/static/images/pic01.jpg" alt="Intro Representation" loading="lazy">
+                    </div>
+                    <div class="content-text">
+                        <p>With a robust background in critical theory and language, alongside a life-long passion for
+                            technology, I blend advanced technical strategy with clear, engaging editorial voices.</p>
+                        <p>My work revolves around translating complex financial concepts into objective, high-quality
+                            industry guides and reviews, ensuring every publication remains highly accessible, accurate,
+                            and
+                            optimized.</p>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Work -->
-            <article id="work">
-                <h2 class="major">Work</h2>
-                <span class="image main"><img src="./static/images/pic02.jpg" alt="" /></span>
-		<p>With a robust academic background in literature and philosophy,
-		 and a life-long passion for technology, 
-		 I have a versatile skillset that includes technical knowledge of important tools 
-		 and concepts in the technology or finance industries as well as the
-		 ability to communicate those ideas to an audience of any demographic.
-                <p>My GitHub page can be found at <a href="https://github.com/jeffanberg">this link.</a></p>
-                <p>Access my photography portfolio by <a href="http://jeffanberg.myportfolio.com">clicking here</a>.</p>
-            </article>
-
-            <!-- About -->
-            <article id="about">
-                <h2 class="major">About</h2>
-                <span class="image main"><img src="./static/images/pic03.jpg" alt="" /></span>
-		<p>Along with my work experience in PR/IR distribution, my hobbies include
-		programming with Python and C#, open-source development especially with Linux
-		distributions, and creative pursuits utilizing much of Adobe Creative Cloud suite of
-		programs. I hope to apply these wide-ranging interests to an innovative and growing
-		industry that will contribute to the betterment of society. </p>
-            </article>
-
-            <!-- Contact -->
-            <article id="contact">
-                <h2 class="major">Contact</h2>
-                <form method="post" action="submit_form">
-                    <div class="fields">
-                        <div class="field half">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" />
-                        </div>
-                        <div class="field half">
-                            <label for="email">Email</label>
-                            <input type="text" name="email" id="email" />
-                        </div>
-                        <div class="field">
-                            <label for="message">Message</label>
-                            <textarea name="message" id="message" rows="4"></textarea>
-                        </div>
-                        <div class="field">
-                            <div class="g-recaptcha" data-sitekey="6LfTefcUAAAAAMsBLYsUbQ-E8FYoFSULI9G5Z0FU" data-theme="dark"></div>
+            <!-- Work Panel -->
+            <div class="glass-panel" id="panel-work">
+                <button class="close-btn" aria-label="Close" data-action="close">&times;</button>
+                <h2>Work</h2>
+                <div class="content-layout">
+                    <div class="content-text">
+                        <p>As an editor in the finance industry, I fact-check and publish in-depth reviews for
+                            StockBrokers.com and ForexBrokers.com, managing a backend data portfolio of thousands of
+                            broker variables.</p>
+                        <p>Beyond executing quarterly editorial roadmaps, I pioneer the use of AI to
+                            enhance editorial production without sacrificing high-quality writing and research from
+                            human experts. In my spare time, I pursue technical development with hobbyist programming
+                            and creative photography.</p>
+                        <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div>
+                                <h4
+                                    style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
+                                    Finance Profiles</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                    <a href="https://www.stockbrokers.com/about/jeff-anberg" target="_blank"
+                                        class="btn primary" style="width: 100%; padding: 0.8rem 0.5rem;">StockBrokers.com</a>
+                                    <a href="https://www.forexbrokers.com/about/jeff-anberg" target="_blank"
+                                        class="btn primary" style="width: 100%; padding: 0.8rem 0.5rem;">ForexBrokers.com</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h4
+                                    style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
+                                    Creative & Tech</h4>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                    <a href="https://github.com/jeffanberg" target="_blank" class="btn" style="width: 100%; padding: 0.8rem 0.5rem;">GitHub
+                                        Portfolio</a>
+                                    <a href="http://jeffanberg.myportfolio.com" target="_blank"
+                                        class="btn" style="width: 100%; padding: 0.8rem 0.5rem;">Photography</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Send Message" class="primary" /></li>
-                        <li><input type="reset" value="Reset" /></li>
-                    </ul>
+                    <div class="content-image">
+                        <img src="/static/images/pic02.jpg" alt="Work Representation" loading="lazy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Panel -->
+            <div class="glass-panel" id="panel-about">
+                <button class="close-btn" aria-label="Close" data-action="close">&times;</button>
+                <h2>About</h2>
+                <div class="content-layout">
+                    <div class="content-image">
+                        <img src="/static/images/pic03.jpg" alt="About Me" loading="lazy">
+                    </div>
+                    <div class="content-text">
+                        <p>In addition to executing strategic SEO roadmaps and managing complex data sets in the finance
+                            sector, my personal passions include programming with Python and C++, open-source Linux
+                            development, and creative photography.</p>
+                        <p>I drive industry-leading results by implementing novel solutions, utilizing AI to optimize
+                            workflows, and cultivating highly collaborative environments.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Panel -->
+            <div class="glass-panel" id="panel-contact">
+                <button class="close-btn" aria-label="Close" data-action="close">&times;</button>
+                <h2>Contact</h2>
+                <div class="content-text">
+                    <p>Send me a message and I'll get back to you as soon as possible.</p>
+                </div>
+                <!-- Contact form dynamically handled via JS -->
+                <form id="contact-form" class="contact-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="6LfTefcUAAAAAMsBLYsUbQ-E8FYoFSULI9G5Z0FU"
+                            data-theme="dark"></div>
+                    </div>
+                    <div id="form-msg" style="display: none; padding: 1rem; border-radius: 8px;"></div>
+                    <div>
+                        <button type="submit" class="btn primary">Send Message</button>
+                    </div>
                 </form>
-            </article>
+            </div>
 
+        </main>
 
-            <!-- Contact -->
-            <article id="thankyou">
-                <h2 class="major">Thank you</h2>
-                <p>I will try to get back to you soon.</p>
-            </article>
-        </div>
-    
-        <!-- Footer -->
-        <footer id="footer">
-            <p class="copyright">&copy; Jeff Anberg. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+        <footer>
+            <p>&copy; Jeff Anberg. Designed with a passion for minimalism.</p>
         </footer>
     </div>
-
-    <!-- BG -->
-    <div id="bg"></div>
-
-    <!-- Scripts -->
-    <script src="./static/assets/js/jquery.min.js"></script>
-    <script src="./static/assets/js/browser.min.js"></script>
-    <script src="./static/assets/js/breakpoints.min.js"></script>
-    <script src="./static/assets/js/util.js"></script>
-    <script src="./static/assets/js/main.js"></script>
-
+    <script src="/static/js/app.js"></script>
 </body>
 
 </html>
