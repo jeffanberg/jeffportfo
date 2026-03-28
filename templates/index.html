@@ -9,7 +9,7 @@
         content="Portfolio of Jeff Anberg, editor, writer, and tech enthusiast based in San Francisco.">
     <!-- Using Vanilla CSS instead of external libraries for maximum performance -->
     <link rel="stylesheet" href="/static/css/style.css?v=1.5">
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6Lf_GJwsAAAAACLncXT--_qoUYj2n83Nc9eXBZ02"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 
 <body>
@@ -147,6 +147,9 @@
                     <div class="form-group">
                         <label for="message">Message</label>
                         <textarea name="message" id="message" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="g-recaptcha" data-sitekey="6Lf6M5wsAAAAAGlDdkkzhT2eQpWZLkPXLwLgnrxN" data-action="contact_form_submit"></div>
                     </div>
                     <div id="form-msg" style="display: none; padding: 1rem; border-radius: 8px;"></div>
                     <div>

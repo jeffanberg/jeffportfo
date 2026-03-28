@@ -36,63 +36,62 @@ document.addEventListener('DOMContentLoaded', () => {
     // AJAX form submission
     const form = document.getElementById('contact-form');
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const msgBox = document.getElementById('form-msg');
             msgBox.style.display = 'none';
             
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Validate that the reCAPTCHA widget generated a token
+            if (!data['g-recaptcha-response']) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                msgBox.style.color = '#fca5a5';
+                msgBox.textContent = 'Please wait for reCAPTCHA to load and try again.';
+                return;
+            }
+
             const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             btn.textContent = 'Sending...';
             btn.disabled = true;
 
-            grecaptcha.enterprise.ready(async () => {
-                try {
-                    const token = await grecaptcha.enterprise.execute('6Lf_GJwsAAAAACLncXT--_qoUYj2n83Nc9eXBZ02', {action: 'contact_form_submit'});
-                    const formData = new FormData(form);
-                    const data = Object.fromEntries(formData.entries());
-                    
-                    data['g-recaptcha-response'] = token;
-
-                    try {
-                        const res = await fetch('/submit_form', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data)
-                        });
-                        
-                        const result = await res.json();
-                        
-                        msgBox.style.display = 'block';
-                        if (res.ok) {
-                            msgBox.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
-                            msgBox.style.color = '#86efac';
-                            msgBox.textContent = 'Message sent successfully. Thank you!';
-                            form.reset();
-                        } else {
-                            msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                            msgBox.style.color = '#fca5a5';
-                            msgBox.textContent = result.message || 'Something went wrong.';
-                        }
-                    } catch (err) {
-                        msgBox.style.display = 'block';
-                        msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                        msgBox.style.color = '#fca5a5';
-                        msgBox.textContent = 'Network error. Please try again.';
-                    } finally {
-                        btn.textContent = originalText;
-                        btn.disabled = false;
+            try {
+                const res = await fetch('/submit_form', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await res.json();
+                
+                msgBox.style.display = 'block';
+                if (res.ok) {
+                    msgBox.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+                    msgBox.style.color = '#86efac';
+                    msgBox.textContent = 'Message sent successfully. Thank you!';
+                    form.reset();
+                    // Re-render the reCAPTCHA widget after form reset
+                    if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) {
+                        grecaptcha.enterprise.reset();
                     }
-                } catch (err) {
-                    msgBox.style.display = 'block';
+                } else {
                     msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
                     msgBox.style.color = '#fca5a5';
-                    msgBox.textContent = 'reCAPTCHA initialization failed. Please try again.';
-                    btn.textContent = originalText;
-                    btn.disabled = false;
+                    msgBox.textContent = result.message || 'Something went wrong.';
                 }
-            });
+            } catch (err) {
+                msgBox.style.display = 'block';
+                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+                msgBox.style.color = '#fca5a5';
+                msgBox.textContent = 'Network error. Please try again.';
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         });
     }
 });

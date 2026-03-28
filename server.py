@@ -36,7 +36,7 @@ def check_recaptcha(f):
                 "event": {
                     "token": recaptcha_response,
                     "expectedAction": "contact_form_submit",
-                    "siteKey": "6Lf_GJwsAAAAACLncXT--_qoUYj2n83Nc9eXBZ02"
+                    "siteKey": "6Lf6M5wsAAAAAGlDdkkzhT2eQpWZLkPXLwLgnrxN"
                 }
             }
             try:
