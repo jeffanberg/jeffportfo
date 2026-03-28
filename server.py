@@ -45,7 +45,9 @@ def check_recaptcha(f):
                     json=data
                 )
                 result = r.json()
-            except:
+                print(f"reCAPTCHA Enterprise API response: {json.dumps(result, indent=2)}")
+            except Exception as e:
+                print(f"reCAPTCHA Enterprise API request failed: {e}")
                 result = {}
 
             # Parse Enterprise assessment response

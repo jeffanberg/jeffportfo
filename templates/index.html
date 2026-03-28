@@ -8,7 +8,7 @@
     <meta name="description"
         content="Portfolio of Jeff Anberg, editor, writer, and tech enthusiast based in San Francisco.">
     <!-- Using Vanilla CSS instead of external libraries for maximum performance -->
-    <link rel="stylesheet" href="/static/css/style.css?v=1.5">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.6">
     <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 
@@ -81,7 +81,7 @@
                                 <h4
                                     style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
                                     Finance Profiles</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                <div class="btn-grid">
                                     <a href="https://www.stockbrokers.com/about/jeff-anberg" target="_blank"
                                         class="btn primary" style="width: 100%; padding: 0.8rem 0.5rem;">StockBrokers.com</a>
                                     <a href="https://www.forexbrokers.com/about/jeff-anberg" target="_blank"
@@ -92,7 +92,7 @@
                                 <h4
                                     style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
                                     Creative & Tech</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                <div class="btn-grid">
                                     <a href="https://github.com/jeffanberg" target="_blank" class="btn" style="width: 100%; padding: 0.8rem 0.5rem;">GitHub
                                         Portfolio</a>
                                     <a href="http://jeffanberg.myportfolio.com" target="_blank"
@@ -134,7 +134,7 @@
                 </div>
                 <!-- Contact form dynamically handled via JS -->
                 <form id="contact-form" class="contact-form">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" name="name" id="name" required />
