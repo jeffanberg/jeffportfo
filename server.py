@@ -1,33 +1,43 @@
 from flask import Flask, render_template, request, make_response, jsonify
 from pathlib import Path
 from functools import wraps
-import csv, requests, json, html, os
+import csv, requests, json, html, os, re
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
-# Limit incoming request payload to 1MB to prevent memory exhaustion DoS attacks
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+
+limiter = Limiter(get_remote_address, app=app, storage_uri="memory://")
+
+EMAIL_REGEX = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
 @app.after_request
 def add_security_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src https://fonts.gstatic.com; "
+        "img-src 'self' data:; "
+        "frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com; "
+        "connect-src 'self';"
+    )
     if request.path.startswith('/static/'):
         response.headers['Cache-Control'] = 'public, max-age=31536000'
     return response
 
 def check_recaptcha(f):
-    """
-    Checks Google reCAPTCHA.
-    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         request.recaptcha_is_valid = None
 
         if request.method == 'POST':
-            # For JSON endpoints and Form endpoints
-            recaptcha_response = request.form.get('g-recaptcha-response') or request.json.get('g-recaptcha-response') if request.is_json else request.form.get('g-recaptcha-response')
-            
+            recaptcha_response = (request.json or {}).get('g-recaptcha-response') if request.is_json else request.form.get('g-recaptcha-response')
+
             api_key = os.environ.get('RECAPTCHA_API_KEY', '')
             if not api_key:
                 print("WARNING: RECAPTCHA_API_KEY environment variable is missing.")
@@ -50,7 +60,6 @@ def check_recaptcha(f):
                 print(f"reCAPTCHA Enterprise API request failed: {e}")
                 result = {}
 
-            # Parse Enterprise assessment response
             token_props = result.get('tokenProperties', {})
             is_valid = token_props.get('valid', False)
             action = token_props.get('action', '')
@@ -81,9 +90,7 @@ def req_page(page_name):
 def sanitize_csv_field(text):
     if not text:
         return ''
-    # Replace newlines and limit length
     text = str(text).replace('\n', ' ').replace('\r', '')[:2000]
-    # Prevent CSV Injection
     if text and text[0] in ['=', '+', '-', '@']:
         text = "'" + text
     return text
@@ -99,16 +106,18 @@ def write_to_db(data):
 
 @app.route('/submit_form', methods=['POST'])
 @check_recaptcha
+@limiter.limit("5 per minute")
 def submit_form():
     try:
         data = request.json if request.is_json else request.form.to_dict()
-        
-        # Validation
+
         if len(data.get('name', '')) > 200 or len(data.get('email', '')) > 200:
             return jsonify({'status': 'error', 'message': 'Name or email is too long.'}), 400
-            
+
+        if not EMAIL_REGEX.match(data.get('email', '')):
+            return jsonify({'status': 'error', 'message': 'Invalid email address.'}), 400
+
         write_to_db(data)
         return jsonify({'status': 'success', 'message': 'Entry made to database'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': 'Did not save to database.'}), 500
-

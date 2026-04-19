@@ -31,7 +31,7 @@ body, html {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('../images/bg.jpg');
+  background-image: url('../images/bg.webp');
   background-size: cover;
   background-position: center;
   z-index: 0;
@@ -61,7 +61,7 @@ body, html {
   z-index: 10;
 }
 
-/* Header / Hero */
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
@@ -121,6 +121,12 @@ main {
   margin-bottom: 2rem;
 }
 
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
 /* Cards (Modals) */
 .glass-panel {
   display: none;
@@ -131,10 +137,11 @@ main {
   border-radius: 16px;
   padding: 3rem;
   max-width: 800px;
+  max-height: 90vh;
   width: 100%;
+  overflow-y: auto;
   box-shadow: 0 24px 40px rgba(0, 0, 0, 0.2);
   position: relative;
-  overflow: hidden;
 }
 
 .glass-panel.active {
@@ -225,11 +232,32 @@ main {
   background: #2563eb;
 }
 
+.btn-block {
+  width: 100%;
+  padding: 0.8rem 0.5rem;
+}
+
 /* Button Grid (Work panel) */
 .btn-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.8rem;
+}
+
+/* Work panel link section */
+.work-links {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.work-category-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.6rem;
+  letter-spacing: 1px;
 }
 
 /* Form Row (Contact panel) */
@@ -274,6 +302,21 @@ input:focus, textarea:focus {
   border-color: var(--accent-color);
 }
 
+.form-msg {
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.form-msg.success {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #86efac;
+}
+
+.form-msg.error {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
 /* Footer */
 footer {
   text-align: center;
@@ -298,7 +341,7 @@ footer {
   .content-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .hero h2 {
     font-size: 2.5rem;
   }
@@ -312,12 +355,10 @@ footer {
     padding: 2rem 1.5rem;
   }
 
-  /* Stack contact form Name/Email fields vertically */
   .form-row {
     grid-template-columns: 1fr;
   }
 
-  /* Stack Work panel buttons vertically */
   .btn-grid {
     grid-template-columns: 1fr;
   }
@@ -332,7 +373,6 @@ footer {
   }
 }
 
-/* Stack Work panel button grids on small screens */
 @media (max-width: 480px) {
   .hero h2 {
     font-size: 2rem;

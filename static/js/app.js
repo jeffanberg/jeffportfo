@@ -2,27 +2,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const panels = document.querySelectorAll('.glass-panel');
     const hero = document.getElementById('hero');
     const closeBtns = document.querySelectorAll('[data-action="close"]');
+    const navLinks = document.querySelectorAll('nav a[data-target]');
+
+    let lastFocusedLink = null;
 
     function updateView() {
         const hash = window.location.hash.substring(1);
-        
+
         let found = false;
         panels.forEach(p => {
             if (p.id === `panel-${hash}`) {
                 p.classList.add('active');
                 found = true;
+                // Move focus to panel heading for accessibility
+                const heading = p.querySelector('h2');
+                if (heading) {
+                    heading.setAttribute('tabindex', '-1');
+                    heading.focus();
+                }
             } else {
                 p.classList.remove('active');
             }
+        });
+
+        navLinks.forEach(a => {
+            a.classList.toggle('active', a.dataset.target === hash);
         });
 
         if (found) {
             hero.style.display = 'none';
         } else {
             hero.style.display = 'block';
-            history.replaceState(null, null, ' '); // remove hash cleanly
+            history.replaceState(null, null, ' ');
+            // Return focus to the link that opened the panel
+            if (lastFocusedLink) {
+                lastFocusedLink.focus();
+                lastFocusedLink = null;
+            }
         }
     }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            lastFocusedLink = link;
+        });
+    });
 
     closeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -30,27 +54,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && window.location.hash) {
+            window.location.hash = '';
+        }
+    });
+
     window.addEventListener('hashchange', updateView);
-    updateView(); // Initial call to handle direct links
+    updateView();
 
     // AJAX form submission
     const form = document.getElementById('contact-form');
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const msgBox = document.getElementById('form-msg');
-            msgBox.style.display = 'none';
-            
+            msgBox.hidden = true;
+            msgBox.className = 'form-msg';
+
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
-            
-            // Validate that the reCAPTCHA widget generated a token
+
             if (!data['g-recaptcha-response']) {
-                msgBox.style.display = 'block';
-                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                msgBox.style.color = '#fca5a5';
-                msgBox.textContent = 'Please wait for reCAPTCHA to load and try again.';
+                showMsg(msgBox, 'error', 'Please wait for reCAPTCHA to load and try again.');
                 return;
             }
 
@@ -65,33 +92,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
+
                 const result = await res.json();
-                
-                msgBox.style.display = 'block';
+
                 if (res.ok) {
-                    msgBox.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
-                    msgBox.style.color = '#86efac';
-                    msgBox.textContent = 'Message sent successfully. Thank you!';
+                    showMsg(msgBox, 'success', 'Message sent successfully. Thank you!');
                     form.reset();
-                    // Re-render the reCAPTCHA widget after form reset
                     if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) {
                         grecaptcha.enterprise.reset();
                     }
                 } else {
-                    msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                    msgBox.style.color = '#fca5a5';
-                    msgBox.textContent = result.message || 'Something went wrong.';
+                    showMsg(msgBox, 'error', result.message || 'Something went wrong.');
                 }
             } catch (err) {
-                msgBox.style.display = 'block';
-                msgBox.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
-                msgBox.style.color = '#fca5a5';
-                msgBox.textContent = 'Network error. Please try again.';
+                showMsg(msgBox, 'error', 'Network error. Please try again.');
             } finally {
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
         });
+    }
+
+    function showMsg(el, type, text) {
+        el.className = `form-msg ${type}`;
+        el.textContent = text;
+        el.hidden = false;
     }
 });
