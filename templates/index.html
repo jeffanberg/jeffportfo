@@ -7,13 +7,18 @@
     <title>Jeff Anberg — Portfolio</title>
     <meta name="description"
         content="Portfolio of Jeff Anberg, editor, writer, and tech enthusiast based in San Francisco.">
-    <!-- Using Vanilla CSS instead of external libraries for maximum performance -->
-    <link rel="stylesheet" href="/static/css/style.css?v=1.6">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Jeff Anberg — Portfolio">
+    <meta property="og:description" content="Portfolio of Jeff Anberg, editor, writer, and tech enthusiast based in San Francisco.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%233b82f6'/><text x='50' y='68' font-family='sans-serif' font-size='48' font-weight='600' fill='white' text-anchor='middle'>JA</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="image" href="/static/images/bg.webp">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.7">
     <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 
 <body>
-    <!-- Background features with dark mode premium overlay -->
     <div class="bg-image"></div>
     <div class="bg-overlay"></div>
 
@@ -33,12 +38,11 @@
         </header>
 
         <main>
-            <!-- Hero content shown when no hash is active -->
             <div class="hero" id="hero">
                 <h2>I translate ideas into impact.</h2>
                 <p>I am an editor and writer living in San Francisco, specializing in financial research, editorial
                     strategy, and optimizing content workflows with AI technologies.</p>
-                <div style="display: flex; justify-content: center; gap: 1rem;">
+                <div class="hero-actions">
                     <a href="#work" data-target="work" class="btn primary">View My Work</a>
                     <a href="#contact" data-target="contact" class="btn">Get in Touch</a>
                 </div>
@@ -50,15 +54,14 @@
                 <h2>Intro</h2>
                 <div class="content-layout">
                     <div class="content-image">
-                        <img src="/static/images/pic01.jpg" alt="Intro Representation" loading="lazy">
+                        <img src="/static/images/pic01.jpg" alt="Intro Representation" loading="lazy" width="960" height="602">
                     </div>
                     <div class="content-text">
                         <p>With a robust background in critical theory and language, alongside a life-long passion for
                             technology, I blend advanced technical strategy with clear, engaging editorial voices.</p>
                         <p>My work revolves around translating complex financial concepts into objective, high-quality
                             industry guides and reviews, ensuring every publication remains highly accessible, accurate,
-                            and
-                            optimized.</p>
+                            and optimized.</p>
                     </div>
                 </div>
             </div>
@@ -76,33 +79,29 @@
                             enhance editorial production without sacrificing high-quality writing and research from
                             human experts. In my spare time, I pursue technical development with hobbyist programming
                             and creative photography.</p>
-                        <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="work-links">
                             <div>
-                                <h4
-                                    style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
-                                    Finance Profiles</h4>
+                                <h4 class="work-category-label">Finance Profiles</h4>
                                 <div class="btn-grid">
                                     <a href="https://www.stockbrokers.com/about/jeff-anberg" target="_blank"
-                                        class="btn primary" style="width: 100%; padding: 0.8rem 0.5rem;">StockBrokers.com</a>
+                                        rel="noopener noreferrer" class="btn primary btn-block">StockBrokers.com</a>
                                     <a href="https://www.forexbrokers.com/about/jeff-anberg" target="_blank"
-                                        class="btn primary" style="width: 100%; padding: 0.8rem 0.5rem;">ForexBrokers.com</a>
+                                        rel="noopener noreferrer" class="btn primary btn-block">ForexBrokers.com</a>
                                 </div>
                             </div>
                             <div>
-                                <h4
-                                    style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.6rem; letter-spacing: 1px;">
-                                    Creative & Tech</h4>
+                                <h4 class="work-category-label">Creative &amp; Tech</h4>
                                 <div class="btn-grid">
-                                    <a href="https://github.com/jeffanberg" target="_blank" class="btn" style="width: 100%; padding: 0.8rem 0.5rem;">GitHub
-                                        Portfolio</a>
-                                    <a href="http://jeffanberg.myportfolio.com" target="_blank"
-                                        class="btn" style="width: 100%; padding: 0.8rem 0.5rem;">Photography</a>
+                                    <a href="https://github.com/jeffanberg" target="_blank"
+                                        rel="noopener noreferrer" class="btn btn-block">GitHub Portfolio</a>
+                                    <a href="https://jeffanberg.myportfolio.com" target="_blank"
+                                        rel="noopener noreferrer" class="btn btn-block">Photography</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="content-image">
-                        <img src="/static/images/pic02.jpg" alt="Work Representation" loading="lazy">
+                        <img src="/static/images/pic02.jpg" alt="Work Representation" loading="lazy" width="960" height="608">
                     </div>
                 </div>
             </div>
@@ -113,7 +112,7 @@
                 <h2>About</h2>
                 <div class="content-layout">
                     <div class="content-image">
-                        <img src="/static/images/pic03.jpg" alt="About Me" loading="lazy">
+                        <img src="/static/images/pic03.jpg" alt="About Me" loading="lazy" width="960" height="623">
                     </div>
                     <div class="content-text">
                         <p>In addition to executing strategic SEO roadmaps and managing complex data sets in the finance
@@ -132,26 +131,25 @@
                 <div class="content-text">
                     <p>Send me a message and I'll get back to you as soon as possible.</p>
                 </div>
-                <!-- Contact form dynamically handled via JS -->
                 <form id="contact-form" class="contact-form">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name" required />
+                            <input type="text" name="name" id="name" autocomplete="name" required />
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" required />
+                            <input type="email" name="email" id="email" autocomplete="email" required />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea name="message" id="message" rows="4" required></textarea>
+                        <textarea name="message" id="message" rows="4" autocomplete="off" required></textarea>
                     </div>
                     <div class="form-group">
                         <div class="g-recaptcha" data-sitekey="6Lf6M5wsAAAAAGlDdkkzhT2eQpWZLkPXLwLgnrxN" data-action="contact_form_submit"></div>
                     </div>
-                    <div id="form-msg" style="display: none; padding: 1rem; border-radius: 8px;"></div>
+                    <div id="form-msg" class="form-msg" hidden></div>
                     <div>
                         <button type="submit" class="btn primary">Send Message</button>
                     </div>
